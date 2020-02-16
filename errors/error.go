@@ -43,6 +43,11 @@ func New(info interface{}, code ...int) error {
 	return err
 }
 
+func As(err error) (target Error, ok bool) {
+	ok = errors.As(err, &target)
+	return
+}
+
 func (e Error) Error() string {
 	return fmt.Sprintf("%s", e.error.Error())
 }
