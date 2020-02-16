@@ -118,13 +118,13 @@ func beanstalkRelease(conn *beanstalk.Conn, id uint64, delay time.Duration) {
 	}
 }
 
-type ProcessFunc func() (delay time.Duration, isDel bool, err error)
+type ProcessFunc func(item *Item) (delay time.Duration, isDel bool, err error)
 
 func process(item *Item, f ProcessFunc) {
 	defer func() {
 		item.Wait.Done()
 	}()
-	delay, isDel, err := f()
+	delay, isDel, err := f(item)
 	if err != nil {
 		log.With("beanstalk.id", item.ID).Error(err)
 	}
