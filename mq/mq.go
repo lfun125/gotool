@@ -124,6 +124,7 @@ func process(item *Item, f ProcessFunc) {
 	defer func() {
 		item.Wait.Done()
 	}()
+
 	delay, isDel, err := f(item)
 	if err != nil {
 		log.With("beanstalk.id", item.ID).Error(err)
