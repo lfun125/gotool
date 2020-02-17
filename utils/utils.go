@@ -64,6 +64,27 @@ func Round(val float64, places int) float64 {
 	return float64(int64(val*f+0.5)) / f
 }
 
+func FloatMultiToInt64(args ...float64) int64 {
+	var r float64 = 1
+	for _, v := range args {
+		r *= v
+	}
+	r = Round(r, 0)
+	return int64(r)
+}
+
+func FloatDivisionToInt64(args ...float64) int64 {
+	if len(args) == 0 {
+		return 0
+	}
+	r := args[0]
+	for _, v := range args[1:] {
+		r /= v
+	}
+	r = Round(r, 0)
+	return int64(r)
+}
+
 // LRead 向上读取文件
 func LRead(name string, level int) (raw []byte, err error) {
 	var file *os.File
