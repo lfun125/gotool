@@ -20,7 +20,7 @@ type Server struct {
 	auth        AuthFunc
 }
 
-func NewServer(log *logger.Logger, options ...option) (*Server, error) {
+func NewServer(log *logger.Logger, options ...Option) (*Server, error) {
 	s := &Server{}
 	s.log = log
 	for _, opt := range options {

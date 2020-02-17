@@ -6,25 +6,26 @@ import (
 	"google.golang.org/grpc/credentials"
 )
 
-type option func(receiver OptionReceiver) error
+type Option func(receiver OptionReceiver) error
 
 type OptionReceiver interface {
 	setCredentials(credentials credentials.TransportCredentials)
 	setTls(tls bool)
 }
 
-func WithCredentialsFromFile(certFile, keyFile string) option {
+func WithServerCredentialsFromFile(certFile, keyFile string) Option {
 	cred, err := credentials.NewServerTLSFromFile(certFile, keyFile)
 	return func(receiver OptionReceiver) error {
 		if err != nil {
 			return err
 		}
 		receiver.setCredentials(cred)
+		receiver.setTls(true)
 		return nil
 	}
 }
 
-func WithCredentials(certPEMBlock, keyPEMBlock []byte) option {
+func WithServerCredentials(certPEMBlock, keyPEMBlock []byte) Option {
 	cert, err := tls.X509KeyPair(certPEMBlock, keyPEMBlock)
 	cred := credentials.NewServerTLSFromCert(&cert)
 	return func(receiver OptionReceiver) error {
@@ -32,11 +33,23 @@ func WithCredentials(certPEMBlock, keyPEMBlock []byte) option {
 			return err
 		}
 		receiver.setCredentials(cred)
+		receiver.setTls(true)
 		return nil
 	}
 }
 
-func WithTls(tls bool) option {
+func WithClientCredentialsFromFile(certFile, serverNameOverride string) Option {
+	cred, err := credentials.NewClientTLSFromFile(certFile, serverNameOverride)
+	return func(receiver OptionReceiver) error {
+		if err != nil {
+			return err
+		}
+		receiver.setCredentials(cred)
+		return nil
+	}
+}
+
+func WithTls(tls bool) Option {
 	return func(receiver OptionReceiver) error {
 		receiver.setTls(tls)
 		return nil

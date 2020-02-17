@@ -17,7 +17,7 @@ type Client struct {
 	appKey      string
 }
 
-func NewClient(address, appID, appKey string, log *logger.Logger, options ...option) (*Client, error) {
+func NewClient(address, appID, appKey string, log *logger.Logger, options ...Option) (*Client, error) {
 	c := &Client{}
 	c.address = address
 	c.appID = appID
@@ -33,6 +33,7 @@ func NewClient(address, appID, appKey string, log *logger.Logger, options ...opt
 
 func (c *Client) setCredentials(credentials credentials.TransportCredentials) {
 	c.credentials = credentials
+	c.tls = true
 }
 
 func (c *Client) setTls(tls bool) {
@@ -74,7 +75,7 @@ func (c customCredential) GetRequestMetadata(ctx context.Context, uri ...string)
 
 // RequireTransportSecurity 自定义认证是否开启TLS
 func (c customCredential) RequireTransportSecurity() bool {
-	return false
+	return true
 }
 
 // interceptor 客户端拦截器

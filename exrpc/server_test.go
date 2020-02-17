@@ -14,11 +14,10 @@ import (
 func TestServer(t *testing.T) {
 	log := logger.NewLogger("/dev/stdout", "20060102150405")
 	listen, err := net.Listen("tcp", ":10101")
-	fmt.Println(123)
 	if err != nil {
 		log.Fatal("Failed to listen: %v", err)
 	}
-	s, err := NewServer(log)
+	s, err := NewServer(log, WithServerCredentialsFromFile("./cer/server.pem", "./cer/server.key"))
 	if err != nil {
 		log.Fatal("Failed to listen: %v", err)
 	}
@@ -33,7 +32,10 @@ func TestServer(t *testing.T) {
 
 func TestClient_Dial(t *testing.T) {
 	log := logger.NewLogger("/dev/stdout", "20060102150405")
-	c, err := NewClient("127.0.0.1:10101", "12323123123", "afafasdfad", log)
+	opts := []Option{
+		WithClientCredentialsFromFile("./cer/server.pem", "wallet"),
+	}
+	c, err := NewClient("127.0.0.1:10101", "12323123123", "afafasdfad", log, opts...)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,4 +50,17 @@ func TestClient_Dial(t *testing.T) {
 	resp, err := hc.SayHello(context.Background(), in)
 	fmt.Println(err)
 	fmt.Println(resp)
+}
+
+// 定义helloService并实现约定的接口
+type helloService struct{}
+
+// HelloService ...
+var HelloService = helloService{}
+
+// SayHello 实现Hello服务接口
+func (h helloService) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloResponse, error) {
+	resp := new(pb.HelloResponse)
+	resp.Message = fmt.Sprintf("Hello %s.\n", in.Name)
+	return resp, nil
 }
