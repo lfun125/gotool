@@ -50,6 +50,14 @@ func Put(addr string, data []byte, key string, pri uint32, delay, trr time.Durat
 	return
 }
 
+func PutAt(addr string, data []byte, key string, pri uint32, t time.Time, trr time.Duration) (id uint64, err error) {
+	delay := t.Sub(time.Now())
+	if delay < 0 {
+		delay = 0
+	}
+	return Put(addr, data, key, pri, delay, trr)
+}
+
 func Subscribe(addr, tube, tag string, do ProcessFunc) (err error) {
 	data := newData()
 	if err = watch(addr, tube, tag, data); err != nil {
