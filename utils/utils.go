@@ -2,8 +2,11 @@ package utils
 
 import (
 	"bytes"
+	"compress/gzip"
+	"crypto/md5"
 	"crypto/tls"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -219,4 +222,30 @@ func Tracks() []string {
 		list = append(list, fmt.Sprintf("%s:%d", file, line))
 	}
 	return list
+}
+
+func Gzip(data []byte) ([]byte, error) {
+	var res bytes.Buffer
+	gz, _ := gzip.NewWriterLevel(&res, 7)
+	_, err := gz.Write(data)
+	if err != nil {
+		return nil, err
+	} else {
+		gz.Close()
+	}
+	return res.Bytes(), nil
+}
+
+func GetImageSrc(domain, fieldID string) string {
+	if strings.HasPrefix(fieldID, "data:image") {
+		return fieldID
+	}
+	domain = strings.TrimRight(domain, "/") + "/upload/images/"
+	return domain + fieldID
+}
+
+func MD5(str string) string {
+	h := md5.New()
+	h.Write([]byte(str))
+	return hex.EncodeToString(h.Sum(nil))
 }
