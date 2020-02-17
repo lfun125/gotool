@@ -21,9 +21,9 @@ func TestServer(t *testing.T) {
 	if err != nil {
 		log.Fatal("Failed to listen: %v", err)
 	}
-	s.SetAuth(func(appId, appKey string) error {
+	s.RegisterPreprocess(func(appId, appKey string, ctx context.Context) (context.Context, error) {
 		fmt.Println(appId, appKey)
-		return nil
+		return ctx, nil
 	})
 	ss := s.Generate()
 	pb.RegisterHelloServer(ss, HelloService)
