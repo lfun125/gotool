@@ -11,13 +11,13 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-type AuthFunc func(appId, appKey string) error
+type Verifier func(appId, appKey string) error
 
 type Server struct {
 	tls         bool
 	log         *logger.Logger
 	credentials credentials.TransportCredentials
-	auth        AuthFunc
+	verifier    Verifier
 }
 
 func NewServer(log *logger.Logger, options ...Option) (*Server, error) {
@@ -39,8 +39,8 @@ func (s *Server) setTls(tls bool) {
 	s.tls = tls
 }
 
-func (s *Server) SetAuth(auth AuthFunc) {
-	s.auth = auth
+func (s *Server) RegisterVerifier(auth Verifier) {
+	s.verifier = auth
 }
 
 func (s Server) Generate() *grpc.Server {
@@ -69,8 +69,8 @@ func (s Server) serverInterceptor(ctx context.Context, req interface{}, info *gr
 		s.log.Info(fmt.Sprintf("[%s] [%s] [%s] %s", st, time.Now().Sub(requestTime), info.FullMethod, e))
 	}()
 	appID, appKey := s.getAuthInfo(ctx)
-	if s.auth != nil {
-		if err = s.auth(appID, appKey); err != nil {
+	if s.verifier != nil {
+		if err = s.verifier(appID, appKey); err != nil {
 			return
 		}
 	}
