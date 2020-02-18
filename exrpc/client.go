@@ -52,6 +52,7 @@ func (c *Client) Dial() (conn *grpc.ClientConn, err error) {
 		grpc.WithPerRPCCredentials(&customCredential{
 			AppID:  c.appID,
 			AppKey: c.appKey,
+			tls:    c.tls,
 		}),
 		grpc.WithUnaryInterceptor(ClientInterceptor),
 	)
@@ -61,6 +62,7 @@ func (c *Client) Dial() (conn *grpc.ClientConn, err error) {
 
 // customCredential 自定义认证
 type customCredential struct {
+	tls    bool
 	AppID  string
 	AppKey string
 }
@@ -75,7 +77,7 @@ func (c customCredential) GetRequestMetadata(ctx context.Context, uri ...string)
 
 // RequireTransportSecurity 自定义认证是否开启TLS
 func (c customCredential) RequireTransportSecurity() bool {
-	return true
+	return c.tls
 }
 
 // interceptor 客户端拦截器

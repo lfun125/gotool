@@ -17,7 +17,9 @@ func TestServer(t *testing.T) {
 	if err != nil {
 		log.Fatal("Failed to listen: %v", err)
 	}
-	s, err := NewServer(log, WithServerCredentialsFromFile("./cer/server.pem", "./cer/server.key"))
+	var opts []Option
+	//opts = append(opts, WithServerCredentialsFromFile("./cer/server.pem", "./cer/server.key"))
+	s, err := NewServer(log, opts...)
 	if err != nil {
 		log.Fatal("Failed to listen: %v", err)
 	}
@@ -33,7 +35,7 @@ func TestServer(t *testing.T) {
 func TestClient_Dial(t *testing.T) {
 	log := logger.NewLogger("/dev/stdout", "20060102150405")
 	opts := []Option{
-		WithClientCredentialsFromFile("./cer/server.pem", "wallet"),
+		//WithClientCredentialsFromFile("./cer/server.pem", "wallet"),
 	}
 	c, err := NewClient("127.0.0.1:10101", "12323123123", "afafasdfad", log, opts...)
 	if err != nil {

@@ -8,7 +8,6 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -20,43 +19,10 @@ import (
 	"net/smtp"
 	"os"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"strings"
 	"time"
 )
-
-// CheckEmail 检查邮箱是否正确
-func CheckEmail(email string) error {
-	if !regexp.MustCompile(`^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$`).MatchString(email) {
-		return errors.New("请输入正确的邮箱")
-	}
-	return nil
-}
-
-// CheckUsername 检查账号是否正确
-func CheckUsername(username string) error {
-	if !regexp.MustCompile(`^\w{4,16}$`).MatchString(username) {
-		return errors.New("请输入正确的账号")
-	}
-	return nil
-}
-
-// CheckPhone 检查手机号是否正确
-func CheckPhone(phone string) error {
-	if !regexp.MustCompile(`^+\d{6,17}$`).MatchString(phone) {
-		return errors.New("请输入正确的手机号")
-	}
-	return nil
-}
-
-// CheckCertID 验证身份证号码
-func CheckCertID(cartID string) error {
-	if !regexp.MustCompile(`^\d{17}(\d|x|X)$`).MatchString(cartID) {
-		return errors.New("请输入正确的身份证号码")
-	}
-	return nil
-}
 
 // Round 四舍五入
 func Round(val float64, places int) float64 {
