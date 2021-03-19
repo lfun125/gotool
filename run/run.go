@@ -27,7 +27,7 @@ func Tracks() []string {
 	return list
 }
 
-func GO(l *logger.Logger, f func(), number int) {
+func GO(l logger.Interface, f func(), number int) {
 	for i := 0; i < number; i++ {
 		go func() {
 			defer func() {
@@ -41,7 +41,7 @@ func GO(l *logger.Logger, f func(), number int) {
 	}
 }
 
-func Hold(l *logger.Logger, handler func() error, sleepDuration, errSleepDuration time.Duration) func() {
+func Hold(l logger.Interface, handler func() error, sleepDuration, errSleepDuration time.Duration) func() {
 	return func() {
 		for {
 			if err := handler(); err != nil {

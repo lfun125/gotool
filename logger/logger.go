@@ -13,6 +13,17 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+type Interface interface {
+	With(args ...interface{}) Interface
+	Kind(v string) Interface
+	Debug(args ...interface{})
+	Info(args ...interface{})
+	Warn(args ...interface{})
+	Error(args ...interface{})
+	Panic(args ...interface{})
+	Fatal(args ...interface{})
+}
+
 type Logger struct {
 	Dir         string
 	TimeFormat  string
@@ -46,7 +57,7 @@ func (l *Logger) clearArgs() *Logger {
 	return l
 }
 
-func (l *Logger) With(args ...interface{}) *Logger {
+func (l *Logger) With(args ...interface{}) Interface {
 	n := l.clone()
 	var k interface{}
 	for i, v := range args {
@@ -68,7 +79,7 @@ func (l *Logger) getArgs() []interface{} {
 	return data
 }
 
-func (l *Logger) Kind(v string) *Logger {
+func (l *Logger) Kind(v string) Interface {
 	return l.clone().clearArgs().With("kind", v)
 }
 

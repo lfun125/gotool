@@ -10,7 +10,7 @@ import (
 	"github.com/lfun125/gotool/run"
 )
 
-var log *logger.Logger
+var log logger.Interface
 
 type Data struct {
 	Error chan error
@@ -31,7 +31,7 @@ func newData() *Data {
 	return data
 }
 
-func SetLogger(logger *logger.Logger) {
+func SetLogger(logger logger.Interface) {
 	log = logger
 }
 

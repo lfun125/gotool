@@ -15,12 +15,12 @@ type Preprocess func(appId, appKey string, ctx context.Context) (context.Context
 
 type Server struct {
 	tls         bool
-	log         *logger.Logger
+	log         logger.Interface
 	credentials credentials.TransportCredentials
 	preprocess  Preprocess
 }
 
-func NewServer(log *logger.Logger, options ...Option) (*Server, error) {
+func NewServer(log logger.Interface, options ...Option) (*Server, error) {
 	s := &Server{}
 	s.log = log
 	for _, opt := range options {

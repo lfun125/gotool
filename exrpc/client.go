@@ -10,14 +10,14 @@ import (
 
 type Client struct {
 	tls         bool
-	log         *logger.Logger
+	log         logger.Interface
 	credentials credentials.TransportCredentials
 	address     string
 	appID       string
 	appKey      string
 }
 
-func NewClient(address, appID, appKey string, log *logger.Logger, options ...Option) (*Client, error) {
+func NewClient(address, appID, appKey string, log logger.Interface, options ...Option) (*Client, error) {
 	c := &Client{}
 	c.address = address
 	c.appID = appID
