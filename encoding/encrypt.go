@@ -32,7 +32,7 @@ func AesDecode(s string) string {
 	cfbdec := cipher.NewCFBDecrypter(block, commonIV)
 	plaintextCopy := make([]byte, len(ciphertext))
 	cfbdec.XORKeyStream(plaintextCopy, ciphertext)
-	result := fmt.Sprintf("%s", plaintextCopy)
+	result := string(plaintextCopy)
 	return result
 }
 
@@ -150,7 +150,6 @@ func AESDecode(src, key string) (string, error) {
 	return string(s), err
 }
 
-
 func EncodePassword(password string) string {
 	password = fmt.Sprintf("%s|%s", password, "")
 	s := AesEncode(password)
@@ -162,4 +161,3 @@ func DecodePassword(password string) string {
 	ary := strings.Split(s, "|")
 	return ary[0]
 }
-

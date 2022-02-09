@@ -5,10 +5,6 @@ import (
 	"testing"
 )
 
-func TestEncode(t *testing.T) {
-	fmt.Println(CheckEmail("123@d2.cs"))
-}
-
 func TestSendToMail(t *testing.T) {
 	err := SendToMail(
 		"system@123.com",

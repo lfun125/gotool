@@ -48,8 +48,16 @@ func As(err error) (target Error, ok bool) {
 	return
 }
 
+func Unwrap(err error) error {
+	return errors.Unwrap(err)
+}
+
+func Is(err, target error) bool {
+	return errors.Is(err, target)
+}
+
 func (e Error) Error() string {
-	return fmt.Sprintf("%s", e.error.Error())
+	return e.error.Error()
 }
 
 func (e Error) Code() int {
