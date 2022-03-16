@@ -48,6 +48,17 @@ func As(err error) (target Error, ok bool) {
 	return
 }
 
+func Wrap(info interface{}, e error, code ...int) error {
+	err := Error{}
+	err.error = fmt.Errorf("%v, %w", info, e)
+	if len(code) == 0 {
+		err.code = Business
+	} else {
+		err.code = code[0]
+	}
+	return err
+}
+
 func Unwrap(err error) error {
 	return errors.Unwrap(err)
 }
