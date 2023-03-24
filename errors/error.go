@@ -43,7 +43,7 @@ func New(info interface{}, code ...int) error {
 	return err
 }
 
-func As(err error) (target Error, ok bool) {
+func As(err error) (target *Error, ok bool) {
 	ok = errors.As(err, &target)
 	return
 }
