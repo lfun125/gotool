@@ -29,7 +29,7 @@ type Error struct {
 }
 
 func New(info interface{}, code ...int) error {
-	err := Error{}
+	err := &Error{}
 	if e, ok := info.(error); ok {
 		err.error = fmt.Errorf("%w", e)
 	} else {
